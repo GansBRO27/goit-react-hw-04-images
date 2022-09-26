@@ -6,7 +6,8 @@ import LoadButton from './loadMoreBtn/loadBtn';
 import AppStyled from './app.styled';
 import Modal from './modal/modal';
 import { spiner } from './loader/loader';
-const KEY = '28561532-78530109a8973756afb34bd86';
+import fetchImages from 'services/fetchImg';
+
 export class App extends Component {
   state = {
     gallery: [],
@@ -18,36 +19,22 @@ export class App extends Component {
     largeImg: '',
   };
 
-  onElemClick = e => {
-    console.log(e);
-    if (e.code === 'Escape') {
-      this.setState({
-        showModal: false,
-      });
-    }
+  onClose = () => {
+    this.setState({
+      showModal: false,
+    });
   };
   clickOnElem = url => {
     this.setState({
       showModal: !this.state.showModal,
       largeImg: url,
     });
+  };
 
-    window.addEventListener('keydown', this.onElemClick);
-  };
-  clickOnOverlay = e => {
-    if (e.target.nodeName !== 'IMG') {
-      this.setState({
-        showModal: !this.state.showModal,
-        largeImg: '',
-      });
-    }
-  };
   handleSubmit = query => {
     if (query.trim() !== '') {
       setTimeout(() => {
-        fetch(
-          `https://pixabay.com/api/?q=${query}&page=${this.state.page}&key=${KEY}&image_type=photo&orientation=horizontal&per_page=12`
-        )
+        fetchImages(query, this.state.page)
           .then(responce => responce.json())
           .then(({ hits, totalHits }) =>
             this.setState({ gallery: hits, total: totalHits, page: '1' })
@@ -61,9 +48,7 @@ export class App extends Component {
     this.setState({
       isLoading: true,
     });
-    fetch(
-      `https://pixabay.com/api/?page=${this.state.page}&key=${KEY}&image_type=photo&orientation=horizontal&per_page=12`
-    )
+    fetchImages(this.state.page)
       .then(responce => responce.json())
       .then(({ hits, totalHits }) =>
         this.setState(prevState => {
@@ -85,7 +70,7 @@ export class App extends Component {
       return (
         <Modal
           url={this.state.largeImg}
-          onElemClick={this.onElemClick}
+          onClose={this.onClose}
           onOverlayClick={this.clickOnOverlay}
         />
       );

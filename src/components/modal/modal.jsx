@@ -6,15 +6,29 @@ import PropTypes from 'prop-types';
 import Img from './img.styled';
 const modalRoot = document.querySelector('#modal-root');
 export default class Modal extends Component {
-  componentWillUnmount() {
-    window.removeEventListener('keydown', this.props.onElemClick);
+  componentDidMount() {
+    window.addEventListener('keydown', this.onHendlerEsc);
+    window.addEventListener('click', this.handleBackdropClick);
   }
-
+  componentWillUnmount() {
+    window.removeEventListener('keydown', this.onHendlerEsc);
+    window.removeEventListener('click', this.handleBackdropClick);
+  }
+  handleBackdropClick = e => {
+    if (e.target === e.currentTarget) {
+      this.props.onClose();
+    }
+  };
+  onHendlerEsc = e => {
+    if (e.code === 'Escape') {
+      this.props.onClose();
+    }
+  };
   render() {
     return createPortal(
-      <Overlay className="overlay" onClick={this.props.onOverlayClick}>
+      <Overlay className="overlay" onClick={this.handleBackdropClick}>
         <ModalStyled className="modal">
-          <Img src={this.props.url} alt="" />
+          <Img src={this.props.url} alt="photo" />
         </ModalStyled>
       </Overlay>,
       modalRoot

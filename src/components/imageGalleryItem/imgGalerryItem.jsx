@@ -1,9 +1,13 @@
 import PropTypes from 'prop-types';
 export default function GalleryItem({ pageURL, largeImageURL, onClick }) {
+
   return (
     <li className="gallery-item">
       <img
-        onClick={() => onClick(largeImageURL)}
+        onClick={() => {
+          onClick(largeImageURL);
+          
+        }}
         src={pageURL}
         alt=""
         name={largeImageURL}

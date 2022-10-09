@@ -1,4 +1,3 @@
-import { Component } from 'react';
 import SearchBar from './searchbar/searchBar';
 import ImageGallery from './imageGallery/imageGallery';
 import Form from './form/form';
@@ -14,7 +13,7 @@ export function AppHook() {
   const [showModal, setShowModal] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [page, setPage] = useState(1);
-  const [total, setTotal] = useState(null);
+
   const [query, setQuery] = useState('');
   const [largeImg, setLargeImg] = useState('');
   useEffect(() => {
@@ -24,7 +23,6 @@ export function AppHook() {
           .then(responce => responce.json())
           .then(({ hits, totalHits }) => {
             setGallery(prevState => [...prevState, ...hits]);
-            setTotal(totalHits);
           })
           .finally(() => setIsLoading(false));
       }, 1000);

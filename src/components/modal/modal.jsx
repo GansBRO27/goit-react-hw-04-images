@@ -1,11 +1,10 @@
-import { Component } from 'react';
+
 import { createPortal } from 'react-dom';
 import Overlay from './modal.styled';
 import ModalStyled from './modalStyled.styled';
 import PropTypes from 'prop-types';
 import Img from './img.styled';
 import { useEffect } from 'react';
-import { useState } from 'react';
 
 const modalRoot = document.querySelector('#modal-root');
 
@@ -27,7 +26,7 @@ export default function ModalHook({ url, onClose }) {
       document.removeEventListener('keydown', onHendlerEsc);
       window.removeEventListener('click', handleBackdropClick);
     };
-  }, []);
+  }, [onClose]);
   const handleBackdropClick = e => {
     if (e.target === e.currentTarget) {
       onClose();
